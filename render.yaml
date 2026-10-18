@@ -1,0 +1,29 @@
+# Render Blueprint Specification for CardioLens
+# Deploy with 1-click on Render: https://dashboard.render.com/blueprints
+
+services:
+  # =========================================================================
+  # OPTION 1: Single Unified Web Service (Recommended for Free Tier)
+  # Builds both React Vite frontend and Python Flask backend into one service.
+  # Zero CORS issues, no dual-service spin-down delays, serves UI & API on 1 URL.
+  # =========================================================================
+  - type: web
+    name: cardiolens
+    runtime: python
+    region: oregon # or ohio / frankfurt / singapore
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn --workers=2 --threads=2 --timeout=120 --bind=0.0.0.0:$PORT backend.app:app"
+    healthCheckPath: "/api/health"
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: NODE_VERSION
+        value: 20.12.0
+      - key: MODEL_WEIGHTS_PATH
+        value: cardiolens_model.pth
+      - key: FLASK_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: "*"

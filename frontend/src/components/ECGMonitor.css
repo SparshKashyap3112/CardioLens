@@ -1,0 +1,359 @@
+/* ==========================================================================
+   ECG Monitor Visualizer Component Styles
+   Hospital-Grade Telemetry Display (Medanta White/Coral Theme + Medical CRT Monitor)
+   ========================================================================== */
+
+.ecg-monitor-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(35, 45, 55, 0.12);
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ecg-monitor-panel:hover {
+  border-color: rgba(232, 91, 63, 0.25);
+  box-shadow: 0 14px 34px -8px rgba(232, 91, 63, 0.06), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+}
+
+/* Header Section */
+.ecg-monitor-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid rgba(35, 45, 55, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.ecg-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ecg-icon-wrapper {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 0.5rem;
+  background: #FFF5F2;
+  border: 1px solid rgba(232, 91, 63, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #E85B3F;
+  flex-shrink: 0;
+}
+
+.ecg-monitor-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #202124;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ecg-monitor-subtitle {
+  font-size: 0.6875rem;
+  color: #686D75;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Status Pill */
+.ecg-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ecg-status-pill.status-idle {
+  background: #F1F3F5;
+  color: #495057;
+  border-color: rgba(73, 80, 87, 0.15);
+}
+
+.ecg-status-pill.status-uploading {
+  background: #FFF7ED;
+  color: #C2410C;
+  border-color: rgba(194, 65, 12, 0.2);
+}
+
+.ecg-status-pill.status-processing {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: rgba(5, 150, 105, 0.25);
+}
+
+.ecg-status-pill.status-complete {
+  background: #F0FDF4;
+  color: #166534;
+  border-color: rgba(22, 101, 52, 0.2);
+}
+
+.ecg-status-pill.status-error {
+  background: #FEF2F2;
+  color: #991B1B;
+  border-color: rgba(153, 27, 27, 0.2);
+}
+
+/* Status Indicator Dot */
+.ecg-status-dot {
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.status-idle .ecg-status-dot {
+  background: #94A3B8;
+}
+
+.status-uploading .ecg-status-dot {
+  background: #F97316;
+  animation: ecgPulse 1.2s infinite ease-in-out;
+}
+
+.status-processing .ecg-status-dot {
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981;
+  animation: ecgPulse 0.9s infinite ease-in-out;
+}
+
+.status-complete .ecg-status-dot {
+  background: #22C55E;
+}
+
+.status-error .ecg-status-dot {
+  background: #EF4444;
+}
+
+@keyframes ecgPulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Inner Medical Monitor Display (Dark screen with green phosphor trace)
+   ========================================================================== */
+.ecg-screen-wrapper {
+  position: relative;
+  margin: 0.75rem 1rem;
+  border-radius: 0.875rem;
+  background: #0B0F17;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* CRT Scanline / Texture overlay */
+.ecg-screen-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.4;
+  border-radius: inherit;
+}
+
+/* Screen Telemetry Top Info Bar */
+.ecg-screen-telemetry {
+  position: absolute;
+  top: 0.625rem;
+  left: 0.875rem;
+  right: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+  color: rgba(16, 185, 129, 0.75);
+  letter-spacing: 0.05em;
+}
+
+.telemetry-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(11, 15, 23, 0.75);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.telemetry-state-live {
+  color: #10B981;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* The Canvas itself */
+.ecg-canvas {
+  display: block;
+  width: 100%;
+  height: 140px;
+  background: transparent;
+  cursor: default;
+}
+
+@media (min-width: 640px) {
+  .ecg-canvas {
+    height: 160px;
+  }
+}
+
+/* Optional Upload Progress Bar along bottom of screen */
+.ecg-screen-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  z-index: 3;
+}
+
+.ecg-screen-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #34D399);
+  box-shadow: 0 0 8px #10B981;
+  transition: width 0.2s ease-out;
+}
+
+/* ==========================================================================
+   Footer Section
+   ========================================================================== */
+.ecg-monitor-footer {
+  padding: 0.75rem 1.25rem 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(35, 45, 55, 0.06);
+}
+
+.ecg-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ecg-state-desc {
+  display: flex;
+  align-items: center;
+  gap: 0.4375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #202124;
+}
+
+.ecg-state-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.375rem;
+  background: #F1F3F5;
+  color: #495057;
+  border: 1px solid rgba(73, 80, 87, 0.12);
+}
+
+.ecg-state-code.code-processing {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+.ecg-state-code.code-uploading {
+  background: #FFF7ED;
+  color: #C2410C;
+  border-color: rgba(194, 65, 12, 0.2);
+}
+
+.ecg-state-code.code-complete {
+  background: #F0FDF4;
+  color: #166534;
+  border-color: rgba(22, 101, 52, 0.2);
+}
+
+.ecg-state-code.code-error {
+  background: #FEF2F2;
+  color: #991B1B;
+  border-color: rgba(153, 27, 27, 0.2);
+}
+
+/* Clinical Disclaimer & Note */
+.ecg-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: #686D75;
+  line-height: 1.4;
+  margin-top: 0.375rem;
+  padding-top: 0.375rem;
+  border-top: 1px dashed rgba(35, 45, 55, 0.08);
+}
+
+.ecg-disclaimer-icon {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  flex-shrink: 0;
+  color: #E85B3F;
+  margin-top: 0.125rem;
+}
+
+/* Retry Button in Error State */
+.ecg-retry-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: 0.375rem;
+  background: #FFF5F2;
+  color: #E85B3F;
+  border: 1px solid rgba(232, 91, 63, 0.3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ecg-retry-btn:hover {
+  background: #E85B3F;
+  color: #FFFFFF;
+}
