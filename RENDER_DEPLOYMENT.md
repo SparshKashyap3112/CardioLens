@@ -57,14 +57,18 @@ If you prefer to configure the service manually through the Render dashboard:
 | **Region** | Oregon (US West) or your preferred region |
 | **Branch** | `main` |
 | **Runtime** | `Python 3` |
-| **Build Command** | `./build.sh` *(or command below)* |
-| **Start Command** | `gunicorn --workers=2 --threads=2 --timeout=120 --bind=0.0.0.0:$PORT backend.app:app` |
-| **Instance Type** | `Free` |
+> [!TIP]
+> **Zero-Friction Static Serving:** The production frontend bundle is now pre-built and tracked in `dist/` and `frontend/dist/`. This means Render's Python runtime can serve the full React interface immediately without requiring Node.js/npm during cloud build time.
 
-**Alternative inline Build Command** (if not using `build.sh`):
+**Build Command**:
 ```bash
-pip install --upgrade pip && pip install torch --extra-index-url https://download.pytorch.org/whl/cpu && pip install -r backend/requirements.txt && cd frontend && npm install && npm run build && cd ..
+./build.sh
 ```
+*(or simple Python install command)*:
+```bash
+pip install --upgrade pip && pip install torch --extra-index-url https://download.pytorch.org/whl/cpu && pip install -r backend/requirements.txt
+```
+
 
 ### Environment Variables
 Under the **"Environment"** tab, add:

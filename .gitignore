@@ -9,7 +9,6 @@ venv/
 ENV/
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -28,10 +27,13 @@ wheels/
 # Node & Frontend
 node_modules/
 frontend/node_modules/
-frontend/dist/
 frontend/dist-ssr/
 *.local
 .npm
+
+# Explicitly track pre-built production dist bundles for zero-build Render deployment
+!dist/
+!frontend/dist/
 
 # Logs & OS
 *.log

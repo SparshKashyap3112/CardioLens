@@ -231,7 +231,12 @@ def generate_report():
 # -------------------------------------------------------------------------
 # FRONTEND STATIC FILES SERVING (Unified Web Service on Render / Cloud)
 # -------------------------------------------------------------------------
+# Look for pre-built frontend distribution in frontend/dist or root dist
 FRONTEND_DIST = os.path.join(BASE_DIR, "frontend", "dist")
+if not os.path.isdir(FRONTEND_DIST) and os.path.isdir(os.path.join(BASE_DIR, "dist")):
+    FRONTEND_DIST = os.path.join(BASE_DIR, "dist")
+elif not os.path.isdir(FRONTEND_DIST) and os.path.isdir(os.path.join(os.getcwd(), "dist")):
+    FRONTEND_DIST = os.path.join(os.getcwd(), "dist")
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
