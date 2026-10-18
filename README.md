@@ -1,5 +1,11 @@
 # CardioLens — AI-Powered Heart Murmur Detection Platform
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-SparshKashyap3112%2FCardioLens-E85B3F?logo=github)](https://github.com/SparshKashyap3112/CardioLens)
+[![Python Version](https://img.shields.io/badge/Python-3.10%20%7C%203.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Render Deployable](https://img.shields.io/badge/Render-Deploy%20Ready-46E3B7?logo=render&logoColor=black)](https://render.com/)
+
 CardioLens is an investigational, clinical-grade full-stack web application designed for screening and identifying heart murmurs from phonocardiogram (PCG) audio recordings. The platform combines a hospital-inspired glassmorphism web interface with a Python Flask REST API powered by a trained deep learning Convolutional Neural Network (`HeartSoundCNN`) developed in PyTorch.
 
 ---
@@ -20,12 +26,14 @@ CardioLens is an investigational, clinical-grade full-stack web application desi
 ## 1. Key Features
 
 - **Genuine Neural Network Inference**: Directly integrates your trained `HeartSoundCNN` PyTorch model (`cardiolens_model.pth` and `cardiolens_model.pkl`). No mock data or fabricated outputs.
+- **ECG-Style Signal Monitor Visualizer**: Medanta-inspired hospital telemetry panel featuring a dark CRT monitoring display (`#0B0F17`), subtle medical grid lines, and a luminous phosphor-green waveform. Connects to real analysis lifecycle states (`Standby`, `Uploading Audio`, `Analysis in Progress`, `Processing Complete`, `Analysis Error`).
 - **2000 Hz Standardized Audio Preprocessing**: Recreates the training pipeline using Librosa (mono conversion, 5.0-second fixed duration padding/truncation, 128 Mel-frequency bands, power-to-dB conversion, and 0-to-1 min-max scaling).
 - **Interactive Audio Waveform Visualizer**: Allows users to preview uploaded heart sounds, play/pause, scrub/seek, and visualize actual acoustic amplitude envelopes.
 - **One-Click Clinical Demo Samples**: Includes pre-loaded PCG recordings from the PhysioNet CirCor DigiScope dataset (Normal and Murmur Present cases) for instant testing without needing audio files on hand.
 - **Explainable Screening Outcome**: Delivers predicted classes (`Normal` vs `Murmur Present`) alongside calibrated Softmax probabilities, inference latency (approx. 20ms on CPU), and acoustic energy metrics.
 - **Downloadable PDF Clinical Screening Reports**: Generates hospital-styled PDF reports via ReportLab with screening IDs, recording metadata, neural network details, and clinical limitations.
 - **Session-Persistent History**: Stores recent screenings in the local browser session for rapid review without permanently exposing raw patient audio.
+- **Zero-Friction Cloud Deployment**: Comes with pre-compiled production `dist/` bundles and `render.yaml` for instant 1-click deployment on Render without needing Node.js during cloud build time.
 
 ---
 
@@ -40,6 +48,8 @@ Inspired by premier healthcare web architectures (such as the Medanta hospital d
 | **Main Background** | `#F5F6F8` | Clean, calm medical light-gray canvas |
 | **Glass Surface** | `rgba(255, 255, 255, 0.82)` | Semi-transparent cards with `backdrop-filter: blur(16px)` |
 | **Glass Borders** | `rgba(35, 45, 55, 0.10)` | Refined, hairline structural dividers |
+| **Monitor Screen** | `#0B0F17` | Dark obsidian CRT canvas with subtle green medical grid |
+| **Monitor Phosphor**| `#10B981` / `#34D399` | Soft luminous green cardiac tracing with bloom glow |
 | **Primary Text** | `#202124` | High-contrast, readable medical slate |
 | **Muted Text** | `#686D75` | Clinical metadata and subtitles |
 | **Normal Status** | `#21865B` | Calibrated emerald for negative murmur screenings |
@@ -79,38 +89,49 @@ Output: [Batch, 2] Raw Logits (Class 0: Normal, Class 1: Murmur Present)
 ```
 CardioLens/
 ├── backend/
-│   ├── app.py                     # Flask REST API server & CORS configuration
+│   ├── app.py                     # Flask REST API server & static dist serving
 │   ├── model_loader.py            # Singleton model weights loader (CPU/CUDA)
 │   ├── inference.py               # Evaluation forward pass & confidence calculation
 │   ├── audio_preprocessing.py     # Librosa decode, resample, & spectrogram generator
 │   ├── report_generator.py        # ReportLab PDF clinical report engine
 │   ├── requirements.txt           # Python dependency specifications
 │   ├── .env.example               # Example environment configuration
+│   ├── demo_samples/              # CirCor clinical demonstration recordings (.wav)
 │   └── tests/
-│       └── test_api.py            # Automated unittest suite (8 test cases)
+│       └── test_api.py            # Automated test suite (8 test cases, 100% passing)
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
+│   │   │   ├── ECGMonitor.jsx     # Medical CRT telemetry monitor with scrolling Canvas
+│   │   │   ├── ECGMonitor.css     # Hospital-grade monitor styling & glowing phosphor trace
 │   │   │   ├── Navbar.jsx         # Sticky glass header with health indicator
 │   │   │   ├── Footer.jsx         # Medical disclaimers, modals, & legal text
 │   │   │   └── WaveformVisualizer.jsx # HTML5 audio player & seekable waveform
 │   │   ├── pages/
 │   │   │   ├── Home.jsx           # Landing page with hero & workflow timeline
-│   │   │   └── Analyze.jsx        # Analysis workspace with drag-drop & results
+│   │   │   └── Analyze.jsx        # Analysis workspace with drag-drop, ECG monitor, & results
 │   │   ├── services/
 │   │   │   └── api.js             # Axios client for backend REST communication
-│   │   ├── App.jsx                # React router & scroll management
+│   │   ├── App.jsx                # React router & navigation
 │   │   ├── index.css              # Glassmorphism tokens & Tailwind imports
 │   │   └── main.jsx               # React entry point
 │   ├── public/
 │   │   ├── favicon.svg            # Heart-waveform SVG icon
 │   │   └── images/                # High-res hospital photography assets
+│   ├── dist/                      # Pre-compiled production React distribution
 │   ├── package.json
 │   └── vite.config.js             # Vite dev server with /api proxy to Flask
+├── dist/                          # Root pre-compiled static bundle for zero-build deployment
 ├── cardiolens_model.pth           # Trained PyTorch CNN checkpoint
 ├── cardiolens_model.pkl           # Model metadata dictionary
 ├── model.py                       # HeartSoundCNN model definition
 ├── dataset.py                     # Training dataset loader
+├── train.py                       # CNN training loop
+├── evaluate.py                    # Model evaluation script
+├── build.sh                       # Production build script for cloud platforms
+├── Dockerfile                     # Multi-stage production container
+├── render.yaml                    # 1-Click Render Blueprint specification
+├── RENDER_DEPLOYMENT.md           # Step-by-step Render deployment guide
 └── README.md
 ```
 
